@@ -1,0 +1,15 @@
+# to build the docker the first time
+docker build -t mgleason/vrt_blending -f gbdx/Dockerfile .
+
+# to spin up the docker image with no volume mounts
+docker run -it mgleason/vrt_blending
+
+# to spin up docker image with simulated input/output mounts
+LOCAL_PATH=$(pwd)
+docker run --rm -v $LOCAL_PATH/gbdx/vrtamix/sample_input:/mnt/work/input -v $LOCAL_PATH/gbdx/vrtamix/sample_output:/mnt/work/output -it mgleason/vrt_blending
+
+# within the docker, run the script
+python /vrt_blending/vrt_blending/task_runners/run_vrtamix.py
+
+# push to docker hub
+docker push mgleason/vrt_blending

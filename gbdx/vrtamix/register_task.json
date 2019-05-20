@@ -1,0 +1,40 @@
+{
+    "inputPortDescriptors": [
+        {
+            "required": true,
+            "type": "directory",
+            "description": "Path to source VRT created from gdalbuildvrt",
+            "name": "data"
+        }, 
+        {
+            "required": false,
+            "type": "string",
+            "description": "(Optional) Mathematical function to be used for blending overlapping pixels in VRT. Valid options are: min, mean, max. Default: mean",
+            "name": "blend_func"
+        }
+    ],
+    "outputPortDescriptors": [
+        {
+            "required": true,
+            "type": "directory",
+            "description": "Directory holding output VRT with embedded pixel function.",
+            "name": "data"
+        }
+    ],
+    "containerDescriptors": [{
+        "type": "DOCKER",
+        "command": "python /vrt_blending/vrt_blending/task_runners/run_vrtamix.py",
+        "properties": {
+            "image": "mgleason/vrt_blending:latest",
+            "domain": "t2medium"
+        }
+    }],
+    "name": "vrtamix",
+    "taskOwnerEmail": "michael.gleason@digitalglobe.com",
+    "version": "0.0.2",
+    "description": "WARNING: THIS TASK IS EXPERIMENTAL AND HAS NOT BEEN ROBUSTLY TESTED. This tool applies a blending PixelFunction to an existing tiled VRT, produced by the gdalbuildvrt CLI. The options for blending include 'min', 'mean', and 'max'. The tool outputs a new VRT, which can then be used via gdal_translate to produce a mosaic with blending at the overlaps between images, as follows: `env GDAL_VRT_ENABLE_PYTHON=YES gdal_translate blended.vrt blended.tif`. Warning: It is meant to be used on single band data and will likely fail on multiband inputs.",
+    "properties": {
+        "isPublic": true,
+        "timeout": 36000
+    }
+}
